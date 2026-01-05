@@ -1,3 +1,4 @@
+import 'package:ecommerce/common/widgets/button/add_to_card_button.dart';
 import 'package:ecommerce/common/widgets/custom_shapes/rounded_container.dart';
 import 'package:ecommerce/common/widgets/images/rounded_images.dart';
 import 'package:ecommerce/common/widgets/products/favourite/favourite_icon.dart';
@@ -12,17 +13,11 @@ import 'package:ecommerce/utils/constants/sizes.dart';
 import 'package:ecommerce/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
-
 
 class UProductCardHorizontal extends StatelessWidget {
-  const UProductCardHorizontal({
-    super.key,
-    required this.product
-  });
+  const UProductCardHorizontal({super.key, required this.product});
 
   final ProductModel product;
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,19 +98,7 @@ class UProductCardHorizontal extends StatelessWidget {
                           Flexible(child: UProductPriceText(price: controller.getProductPrice(product))),
 
                           /// Add Button
-                          // ProductAddToCartButton(product: product)
-                          Container(
-                            width: USizes.iconLg * 1.2,
-                            height: USizes.iconLg * 1.2,
-                            decoration: BoxDecoration(
-                              color: UColors.primary,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(USizes.cardRadiusMd),
-                                bottomRight: Radius.circular(USizes.productImageRadius),
-                              ),
-                            ),
-                            child: Icon(Iconsax.add, color: UColors.white),
-                          ),
+                          ProductAddToCartButton(product: product)
                         ],
                       )
                     ],

@@ -23,10 +23,23 @@ class FavouriteController  extends GetxController{
 
   /// Function to load Favourites from local storage
   Future<void> initFavourites() async {
-    String encodedFavourites = await _storage.read('favourites');
-    Map<String, dynamic> storedFavourites = jsonDecode(encodedFavourites) as Map<String, dynamic>;
-    favourites.assignAll(storedFavourites.map((key, value) => MapEntry(key, value as bool)));
+    final encodedFavourites = _storage.read('favourites');
+
+    if (encodedFavourites == null) {
+      favourites.clear();
+      return;
+    }
+
+    final Map<String, dynamic> storedFavourites =
+    jsonDecode(encodedFavourites) as Map<String, dynamic>;
+
+    favourites.assignAll(
+      storedFavourites.map(
+            (key, value) => MapEntry(key, value as bool),
+      ),
+    );
   }
+
 
   /// Function to Add OR Remove Product from wishlist
   void toggleFavouriteProduct(String productId) {
