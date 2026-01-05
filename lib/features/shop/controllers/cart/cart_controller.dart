@@ -9,7 +9,7 @@ import 'package:ecommerce/utils/popups/snackbar_helpers.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-class CartController extends GetxController {
+  class CartController extends GetxController {
   static CartController get instance => Get.find();
 
   /// Variables

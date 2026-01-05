@@ -4,11 +4,16 @@ import 'package:ecommerce/common/widgets/button/elevated_button.dart';
 import 'package:ecommerce/common/widgets/custom_shapes/rounded_container.dart';
 import 'package:ecommerce/common/widgets/screens/success_screen.dart';
 import 'package:ecommerce/common/widgets/textfields/promo_code.dart';
+import 'package:ecommerce/features/shop/controllers/cart/cart_controller.dart';
+import 'package:ecommerce/features/shop/controllers/order/order_controller.dart';
 import 'package:ecommerce/features/shop/screens/cart/widgets/cart_items.dart';
 import 'package:ecommerce/features/shop/screens/checkout/widgets/billing_payment_section.dart';
 import 'package:ecommerce/navigation_menu.dart';
 import 'package:ecommerce/utils/constants/images.dart';
 import 'package:ecommerce/utils/constants/sizes.dart';
+import 'package:ecommerce/utils/constants/texts.dart';
+import 'package:ecommerce/utils/helpers/pricing_calculator.dart';
+import 'package:ecommerce/utils/popups/snackbar_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'widgets/billing_address_section.dart';
@@ -19,9 +24,13 @@ class CheckoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = CartController.instance;
+    double subTotal = controller.totalCartPrice.value;
+    double totalPrice = UPricingCalculator.calculateTotalPrice(subTotal, 'India');
+    final orderController = Get.put(OrderController());
 
     return Scaffold(
-      ///-----------[APPBAR]--------------
+      ///-----------[APPBAR]--------------///
       appBar: UAppBar(
         showBackArrow: true,
         title: Text(
@@ -30,7 +39,7 @@ class CheckoutScreen extends StatelessWidget {
         ),
       ),
 
-      ///-----------[BODY]--------------
+      ///-----------[BODY]-----------------///
       body: SingleChildScrollView(
         child: Padding(
           padding: UPadding.screenPadding,
@@ -72,16 +81,14 @@ class CheckoutScreen extends StatelessWidget {
         ),
       ),
 
-      ///-----------[BottomNavigation]--------------
+      ///-----------[BottomNavigation]--------------///
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(USizes.defaultSpace),
         child: UElevatedButton(
-            onPressed: () => Get.to(() => SuccessScreen(
-            title: 'Payment Success',
-            subTitle: 'Your item will be shipped soon',
-            image: UImages.successfulPaymentIcon,
-            onTap: () => Get.offAll(() => NavigationMenu()))),
-            child: Text('Checkout \$263527')
+            onPressed: subTotal > 0
+                ? () => orderController.processOrder(totalPrice)
+                : () => USnackBarHelpers.errorSnackBar(title: 'Empty Cart', message: 'Add items in the cart'),
+            child: Text('Checkout ${UTexts.currency}$totalPrice')
         ),
       ),
 

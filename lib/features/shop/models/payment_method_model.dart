@@ -1,19 +1,19 @@
+import 'package:ecommerce/utils/constants/enums.dart';
 
-
-
-import '../../../utils/constants/enums.dart';
-
-class PaymentMethodModel{
+class PaymentMethodModel {
   String name;
   String image;
-  PaymentMethods paymentMethod;
+  // PaymentMethods paymentMethod;
 
   PaymentMethodModel({
     required this.name,
     required this.image,
-    required this.paymentMethod
-});
+    // required this.paymentMethod,
+  });
 
-
-  static PaymentMethodModel empty() => PaymentMethodModel(name: '', image: '', paymentMethod: PaymentMethods.creditCard);
+  static PaymentMethodModel empty() => PaymentMethodModel(
+    name: '',
+    image: '',
+    // paymentMethod: PaymentMethods.creditCard,
+  );
 }

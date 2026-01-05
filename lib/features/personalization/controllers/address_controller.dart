@@ -1,6 +1,10 @@
 import 'package:ecommerce/common/widgets/loaders/circular_loader.dart';
+import 'package:ecommerce/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce/data/repositories/address/address_repository.dart';
 import 'package:ecommerce/features/personalization/models/address_model.dart';
+import 'package:ecommerce/features/personalization/screens/address/widgets/single_address.dart';
+import 'package:ecommerce/utils/constants/sizes.dart';
+import 'package:ecommerce/utils/helpers/cloud_helper_functions.dart';
 import 'package:ecommerce/utils/helpers/network_manager.dart';
 import 'package:ecommerce/utils/popups/full_screen_loader.dart';
 import 'package:ecommerce/utils/popups/snackbar_helpers.dart';
@@ -134,6 +138,42 @@ class AddressController extends GetxController {
       USnackBarHelpers.errorSnackBar(title: 'Failed!', message: e.toString());
     }
 
+  }
+
+  /// FUnction to show Bottom Sheet to select address
+  Future<void> selectNewAddressBottomSheet(BuildContext context) {
+    return showModalBottomSheet(context: context, builder: (context) => SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(USizes.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            USectionHeading(title: 'Select Address', showActionButton: false),
+            SizedBox(height: USizes.spaceBtwItems),
+            FutureBuilder(
+                future: getAllAddresses(),
+                builder: (context, snapshot) {
+
+                  /// Handle Error, Loading & Empty Sates
+                  final widget = UCloudHelperFunctions.checkMultiRecordState(snapshot: snapshot);
+                  if(widget != null) return widget;
+
+                  return ListView.separated(
+                    shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.length,
+                      separatorBuilder: (context, index) => SizedBox(height: USizes.spaceBtwItems),
+                    itemBuilder: (context, index) => USingleAddress(address: snapshot.data![index], onTap: () {
+                      selectedAddress(snapshot.data![index]);
+                      Get.back();
+                    }),
+                  );
+
+                },)
+          ],
+        ),
+      ),
+    ));
   }
 
   /// Function to reset All-Fields of the form
