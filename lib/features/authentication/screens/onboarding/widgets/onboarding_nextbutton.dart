@@ -1,8 +1,9 @@
+import 'package:ecommerce/common/widgets/button/elevated_button.dart';
+import 'package:ecommerce/features/authentication/controllers/onboarding/onboarding_controller.dart';
+import 'package:ecommerce/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../../common/widgets/button/elevated_button.dart';
-import '../../../../../utils/constants/sizes.dart';
-import '../../../controllers/onboarding/onboarding_controller.dart';
+
 
 class OnboardingNextButton extends StatelessWidget {
   const OnboardingNextButton({super.key});

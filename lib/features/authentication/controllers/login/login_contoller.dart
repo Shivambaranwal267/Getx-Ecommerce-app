@@ -29,6 +29,7 @@ class LoginController extends GetxController {
     super.onInit();
   }
 
+  /// Login With Email & Password In Authentication
   Future<void> loginWithEmailAndPassword() async {
     try {
       /// Start Loading
