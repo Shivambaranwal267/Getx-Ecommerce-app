@@ -57,16 +57,16 @@ class BrandController  extends GetxController{
   /// Get Brands for specific Category
   Future<List<BrandModel>> getBrandsForCategory(String categoryId) async {
     try{
-
       final brands = await _repository.fetchBrandsForCategory(categoryId);
       return brands;
-
 
     } catch(e) {
       USnackBarHelpers.errorSnackBar(title: "Failed!", message: e.toString());
       return [];
     }
   }
+
+
 
 
 

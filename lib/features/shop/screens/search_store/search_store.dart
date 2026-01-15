@@ -1,81 +1,91 @@
 import 'package:ecommerce/common/style/padding.dart';
 import 'package:ecommerce/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce/common/widgets/image_text/vertical_image_text.dart';
-import 'package:ecommerce/common/widgets/images/rounded_images.dart';
-import 'package:ecommerce/common/widgets/texts/section_heading.dart';
-import 'package:ecommerce/utils/constants/colors.dart';
-import 'package:ecommerce/utils/constants/images.dart';
+import 'package:ecommerce/common/widgets/layouts/grid_layout.dart';
+import 'package:ecommerce/common/widgets/products/product_cards/product_card_vertical.dart';
+import 'package:ecommerce/features/shop/controllers/product/product_controller.dart';
 import 'package:ecommerce/utils/constants/sizes.dart';
+import 'package:ecommerce/utils/helpers/cloud_helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'widgets/search_store_brands.dart';
+import 'widgets/search_store_categories.dart';
 
 class SearchStoreScreen extends StatelessWidget {
   const SearchStoreScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    RxString searchText = ''.obs;
+
     return Scaffold(
+
       ///-------------------------[APPBAR]---------------------------///
       appBar: UAppBar(showBackArrow: true, title: Text('Search', style: Theme.of(context).textTheme.headlineMedium)),
 
       ///-------------------------[BODY]---------------------------///
       body: SingleChildScrollView(
         child: Padding(
-            padding: UPadding.screenPadding,
+          padding: UPadding.screenPadding,
           child: Column(
             children: [
+
               /// Search Field
-              TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Iconsax.search_normal),
-                  hintText: 'Search in store'
+              Hero(
+                tag: 'search_animation',
+                child: Material(
+                  color: Colors.transparent,
+                  child: TextFormField(
+                    decoration: InputDecoration(prefixIcon: Icon(Iconsax.search_normal), hintText: 'Search in store'),
+                  onChanged: (value) => searchText.value = value,
+                  ),
                 ),
               ),
 
               const SizedBox(height: USizes.spaceBtwSections),
 
-              /// Brands
-              USectionHeading(title: 'Brands'),
+              Obx(() {
+                if(searchText.value.isEmpty) {
+                  return Column(
+                    children: [
+                      /// Brands
+                      SearchStoreBrands(),
 
-              const SizedBox(height: USizes.spaceBtwItems),
+                      const SizedBox(height: USizes.spaceBtwSections),
 
-              Wrap(
-                spacing: USizes.spaceBtwItems,
-                runSpacing: USizes.spaceBtwItems,
-                children: [
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                  UVerticalImageText(title: 'Nike', image: UImages.nikeLogo, textColor: UColors.black),
-                ],
-              ),
-
-              /// Categories
-              USectionHeading(title: 'Categories'),
-
-              const SizedBox(height: USizes.spaceBtwSections),
-
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 20,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: URoundedImage(width: USizes.iconLg, height: USizes.iconLg, imageUrl: UImages.clothesIcon, borderRadius: 0),
-                    title: Text('Clothes'),
-
+                      /// Categories
+                      SearchStoreCategories(),
+                    ],
                   );
-                },
-              )
+                }
 
+                return FutureBuilder(
+                    future: ProductController.instance.getAllProducts(),
+                    builder: (context, snapshot) {
 
+                      /// Handle Loading, Error & Empty
+                      final widget = UCloudHelperFunctions.checkMultiRecordState(snapshot: snapshot);
+                      if(widget != null) return widget;
+
+                      /// Data Found - Products Found
+                      final products = snapshot.data!;
+                      
+                      final filteredProducts = products.where(
+                              (product) =>
+                                  product.title.toLowerCase().contains(searchText.value.toLowerCase())).toList();
+
+                      return UGridLayout(
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = filteredProducts[index];
+                          return UProductCardVertical(product: product);
+                        },
+                      );
+
+                    },
+                );
+              })
             ],
           ),
         ),

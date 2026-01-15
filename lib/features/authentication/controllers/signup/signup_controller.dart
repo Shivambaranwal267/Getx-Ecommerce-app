@@ -44,26 +44,18 @@ class SignUpController extends GetxController {
         return;
       }
 
-
-
       // Check Privacy policy
       if (!privacyPolicy.value) {
         UFullScreenLoader.stopLoading();
         USnackBarHelpers.warningSnackBar(
           title: 'Accept Privacy Policy',
-          message:
-              'In Order to create account, you must have to read and accept the Privacy Policy & Terms of Use.',
+          message: 'In Order to create account, you must have to read and accept the Privacy Policy & Terms of Use.',
         );
         return;
       }
 
-
-
       // Register the User using firebase authentication
-      UserCredential userCredential = await AuthenticationRepository.instance.registerUser(
-        email.text.trim(),
-        password.text.trim(),
-      );
+      UserCredential userCredential = await AuthenticationRepository.instance.registerUser(email.text.trim(), password.text.trim());
 
       // create user model
       UserModel userModel = UserModel(
@@ -81,10 +73,7 @@ class SignUpController extends GetxController {
       await userRepository.saveUserRecord(userModel);
 
       // success message
-      USnackBarHelpers.successSnackBar(
-        title: 'Congratulations!',
-        message: 'Your account has been created! Verify email to continue.',
-      );
+      USnackBarHelpers.successSnackBar(title: 'Congratulations!', message: 'Your account has been created! Verify email to continue.');
 
       // loading stop
       UFullScreenLoader.stopLoading();

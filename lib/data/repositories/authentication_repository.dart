@@ -1,9 +1,4 @@
-import 'package:ecommerce/data/repositories/banner/banner_repository.dart';
-import 'package:ecommerce/data/repositories/brand/brand_repository.dart';
-import 'package:ecommerce/data/repositories/category/category_repository.dart';
-import 'package:ecommerce/data/repositories/product/product_repository.dart';
 import 'package:ecommerce/data/repositories/user/user_repository.dart';
-import 'package:ecommerce/dummy_data.dart';
 import 'package:ecommerce/features/authentication/screens/login/login.dart';
 import 'package:ecommerce/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:ecommerce/features/authentication/screens/signup/verify_email.dart';
@@ -14,7 +9,6 @@ import 'package:ecommerce/utils/exceptions/firebase_exceptions.dart';
 import 'package:ecommerce/utils/exceptions/format_exceptions.dart';
 import 'package:ecommerce/utils/exceptions/platform_exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';

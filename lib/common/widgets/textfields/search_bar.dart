@@ -21,24 +21,27 @@ class USearchBar extends StatelessWidget {
       left: USizes.spaceBtwSections,
       child: GestureDetector(
         onTap: () => Get.to(() => SearchStoreScreen()),
-        child: Container(
-          height: USizes.searchBarHeight,
-          padding: EdgeInsets.symmetric(horizontal: USizes.md),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(USizes.borderRadiusLg),
-            color: dark ? UColors.dark : UColors.light,
-            boxShadow: UShadow.searchBarShadow,
-          ),
-          child: Row(
-            children: [
-              // Search Icon
-              Icon(Iconsax.search_normal, color: UColors.darkerGrey),
-
-              SizedBox(width: USizes.spaceBtwItems),
-
-              // Search Bar title
-              Text(UTexts.searchBarTitle, style: Theme.of(context).textTheme.bodySmall),
-            ],
+        child: Hero(
+          tag: 'search_animation',
+          child: Container(
+            height: USizes.searchBarHeight,
+            padding: EdgeInsets.symmetric(horizontal: USizes.md),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(USizes.borderRadiusLg),
+              color: dark ? UColors.dark : UColors.light,
+              boxShadow: UShadow.searchBarShadow,
+            ),
+            child: Row(
+              children: [
+                // Search Icon
+                Icon(Iconsax.search_normal, color: UColors.darkerGrey),
+          
+                SizedBox(width: USizes.spaceBtwItems),
+          
+                // Search Bar title
+                Text(UTexts.searchBarTitle, style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
           ),
         ),
       ),

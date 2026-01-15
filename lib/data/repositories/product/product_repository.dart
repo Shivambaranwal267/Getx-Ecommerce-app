@@ -17,7 +17,6 @@ class ProductRepository extends GetxController {
   static ProductRepository get instance => Get.find();
 
 
-
   /// Variables
   final _db = FirebaseFirestore.instance;
   final _cloudinaryServices = Get.put(CloudinaryServices());
@@ -85,6 +84,29 @@ class ProductRepository extends GetxController {
       }
 
     }on FirebaseException catch (e) {
+      throw UFirebaseException(e.code).message;
+    } on FormatException catch (_) {
+      throw UFormatException();
+    } on PlatformException catch (e) {
+      throw UPlatformException(e.code).message;
+    } catch (e) {
+      throw 'Something went wrong, Please try again';
+    }
+  }
+
+  /// [Fetch] - Function to fetch list of All products from firebase
+  Future<List<ProductModel>> fetchAllProducts() async {
+    try {
+      final query = await _db.collection(UKeys.productsCollection).get();
+
+      if(query.docs.isNotEmpty) {
+        List<ProductModel> products = query.docs.map((document) => ProductModel.fromSnapshot(document)).toList();
+        return products;
+      }
+
+      return [];
+
+    } on FirebaseException catch (e) {
       throw UFirebaseException(e.code).message;
     } on FormatException catch (_) {
       throw UFormatException();
