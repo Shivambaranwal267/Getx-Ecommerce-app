@@ -22,7 +22,7 @@ class USortableProducts extends StatelessWidget {
       children: [
         /// filter
         DropdownButtonFormField(
-          value: controller.selectedSortOption.value,
+          initialValue: controller.selectedSortOption.value,
           decoration: InputDecoration(prefixIcon: Icon(Iconsax.sort)),
           onChanged: (value) => controller.sortProducts(value!),
           items: ['Name', 'Lower Price', 'Higher Price', 'Sale', 'Newest'].map((filter) {
